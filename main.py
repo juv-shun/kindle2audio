@@ -48,29 +48,6 @@ def activate_kindle_app(kindle_app_name):
         sys.exit(1)
 
 
-def minimize_kindle_app(kindle_app_name):
-    """Kindle アプリを最小化する"""
-    try:
-        # 改良版AppleScript：ウィンドウが存在するか確認してから最小化
-        applescript_command = f"""
-        tell application "{kindle_app_name}"
-            if it is running then
-                try
-                    if (count of windows) > 0 then
-                        set miniaturized of window 1 to true
-                    end if
-                on error
-                    -- ウィンドウ操作に失敗した場合は静かに終了
-                end try
-            end if
-        end tell
-        """
-        subprocess.run(["osascript", "-e", applescript_command], check=False)
-        print(f"{kindle_app_name}の最小化処理を完了しました。")
-    except Exception as e:
-        print(f"Info: {kindle_app_name} の最小化中に例外が発生しましたが、処理は継続します: {e}")
-
-
 def monitor_exit():
     """エンターを2回打ち込むとプログラムを終了するための監視"""
     global SHUTDOWN_FLAG
@@ -215,9 +192,6 @@ def main():
 
     # 処理完了後に音を鳴らす
     play_completion_sound()
-
-    # Kindleを最小化する
-    minimize_kindle_app(config["kindle_app_name"])
 
     print(f"スクリーンショットは {config['output_directory']} ディレクトリに保存されました。")
 
