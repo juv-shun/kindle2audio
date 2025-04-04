@@ -7,6 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
+pyautogui = "^0.9.54"
+pillow = "^11.1.0"
+google-genai = "^1.9.0"
 
 
 [tool.poetry.group.dev.dependencies]

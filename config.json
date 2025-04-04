@@ -1,0 +1,14 @@
+{
+    "screenshot_region": [
+        70,
+        70,
+        1850,
+        1000
+    ],
+    "kindle_app_name": "Amazon Kindle",
+    "page_turn_delay": 1,
+    "activation_delay": 5,
+    "page_turn_direction": "right",
+    "image_format": "png",
+    "output_directory": "./output"
+}
