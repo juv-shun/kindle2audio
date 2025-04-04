@@ -26,7 +26,7 @@ def load_config():
 
 # グローバル変数として `config` をロード
 config = load_config()
-shutdown_flag = False
+SHUTDOWN_FLAG = False
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 
@@ -73,17 +73,17 @@ def minimize_kindle_app(kindle_app_name):
 
 
 def monitor_exit():
-    # エンターを2回打ち込むとプログラムを終了するための監視
-    global shutdown_flag
+    """エンターを2回打ち込むとプログラムを終了するための監視"""
+    global SHUTDOWN_FLAG
     print("途中で作業を終了するには、エンターを2回押してください。")
     count = 0
-    while not shutdown_flag:
+    while not SHUTDOWN_FLAG:
         line = input()
         if line == "":
             count += 1
             if count >= 2:
                 print("終了要求が受け付けられました。処理を停止します。")
-                shutdown_flag = True
+                SHUTDOWN_FLAG = True
                 break
         else:
             count = 0
@@ -143,7 +143,7 @@ def capture_screenshots():
     ensure_output_directory()
 
     while True:
-        if shutdown_flag:
+        if SHUTDOWN_FLAG:
             print("終了要求によりスクリーンショットの取得を停止します。")
             break
 
