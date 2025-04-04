@@ -9,7 +9,6 @@ from pathlib import Path
 
 import pyautogui
 from google import genai
-from google.genai import types
 from PIL import Image
 
 
