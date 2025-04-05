@@ -103,8 +103,7 @@ def capture_screenshot():
 
 
 def capture_screenshots():
-    # Kindleのスクリーンショットを連続取得し、ファイルに保存する
-    print("📸 スクリーンショットの取得を開始します...")
+    """Kindleのスクリーンショットを連続取得し、ファイルに保存する"""
     last_image_hash = None
     page = 1
 
@@ -181,6 +180,8 @@ def main():
         print(f"出力ディレクトリを作成しました: {config['output_directory']}")
 
     # スクリーンショットを取得開始
+    print("📸 スクリーンショットの取得を開始します...")
+
     capture_screenshots()
 
     print("✅ スクリーンショット取得完了")
