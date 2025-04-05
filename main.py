@@ -153,14 +153,6 @@ def ocr(image: Image.Image) -> str:
     return response.text
 
 
-def play_completion_sound():
-    """処理完了時に通知音を再生する"""
-    try:
-        os.system("afplay /System/Library/Sounds/Glass.aiff")
-    except Exception as e:
-        print(f"通知音の再生中に例外が発生しましたが、処理は継続します: {e}")
-
-
 def main():
     # Kindleアプリをアクティブ化
     activate_kindle_app(config["kindle_app_name"])
@@ -187,7 +179,7 @@ def main():
     print("✅ スクリーンショット取得完了")
 
     # 処理完了後に音を鳴らす
-    play_completion_sound()
+    os.system("afplay /System/Library/Sounds/Glass.aiff")
 
     print(f"スクリーンショットは {config['output_directory']} ディレクトリに保存されました。")
 
