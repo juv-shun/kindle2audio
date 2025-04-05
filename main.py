@@ -92,16 +92,6 @@ def setup_screenshot():
         print("エラー: Kindle のフルスクリーン化に失敗しました。")
 
 
-def capture_screenshot():
-    """指定された領域のスクリーンショットを取得"""
-    try:
-        screenshot = pyautogui.screenshot(region=config["screenshot_region"])
-        return screenshot
-    except Exception as e:
-        print(f"スクリーンショット取得中にエラー: {e}")
-        return None
-
-
 def capture_screenshots():
     """Kindleのスクリーンショットを連続取得し、ファイルに保存する"""
     last_image_hash = None
@@ -112,7 +102,7 @@ def capture_screenshots():
             print("終了要求によりスクリーンショットの取得を停止します。")
             break
 
-        screenshot = capture_screenshot()
+        screenshot = pyautogui.screenshot(region=config["screenshot_region"])
         if screenshot is None:
             time.sleep(0.1)
             continue
