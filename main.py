@@ -38,16 +38,6 @@ def image_hash(image):
         return None
 
 
-def activate_kindle_app(kindle_app_name):
-    """Kindle アプリをアクティブ化する"""
-    try:
-        subprocess.run(["osascript", "-e", f'tell application "{kindle_app_name}" to activate'], check=True)
-        time.sleep(2)
-    except subprocess.SubprocessError:
-        print("エラー: Kindle アプリをアクティブ化できませんでした。")
-        sys.exit(1)
-
-
 def monitor_exit():
     """エンターを2回打ち込むとプログラムを終了するための監視"""
     global SHUTDOWN_FLAG
@@ -145,7 +135,8 @@ def ocr(image: Image.Image) -> str:
 
 def main():
     # Kindleアプリをアクティブ化
-    activate_kindle_app(config["kindle_app_name"])
+    subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
+    time.sleep(2)
 
     # スクリーンショット開始位置の設定
     setup_screenshot()
