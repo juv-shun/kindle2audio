@@ -125,7 +125,7 @@ def main():
     subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
     time.sleep(2)
 
-    # スクリーンショット開始位置の設定
+    # スクリーンショット開始準備
     setup_screenshot()
     time.sleep(config["activation_delay"])
 
@@ -133,7 +133,7 @@ def main():
     monitor_thread = threading.Thread(target=monitor_exit, daemon=True)
     monitor_thread.start()
 
-    # 出力ディレクトリの確認
+    # 出力ディレクトリの準備
     if not os.path.exists(config["output_directory"]):
         os.makedirs(config["output_directory"])
         print(f"出力ディレクトリを作成しました: {config['output_directory']}")
