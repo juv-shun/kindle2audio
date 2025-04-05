@@ -102,21 +102,11 @@ def capture_screenshot():
         return None
 
 
-def ensure_output_directory():
-    """出力ディレクトリが存在することを確認し、なければ作成する"""
-    if not os.path.exists(config["output_directory"]):
-        os.makedirs(config["output_directory"])
-        print(f"出力ディレクトリを作成しました: {config['output_directory']}")
-
-
 def capture_screenshots():
     # Kindleのスクリーンショットを連続取得し、ファイルに保存する
     print("📸 スクリーンショットの取得を開始します...")
     last_image_hash = None
     page = 1
-
-    # 出力ディレクトリの確認
-    ensure_output_directory()
 
     while True:
         if SHUTDOWN_FLAG:
@@ -184,6 +174,11 @@ def main():
     # 終了監視スレッドを開始
     monitor_thread = threading.Thread(target=monitor_exit, daemon=True)
     monitor_thread.start()
+
+    # 出力ディレクトリの確認
+    if not os.path.exists(config["output_directory"]):
+        os.makedirs(config["output_directory"])
+        print(f"出力ディレクトリを作成しました: {config['output_directory']}")
 
     # スクリーンショットを取得開始
     capture_screenshots()
