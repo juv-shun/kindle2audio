@@ -22,10 +22,9 @@ def load_config():
         return json.load(f)
 
 
-# グローバル変数として `config` をロード
 config = load_config()
 SHUTDOWN_FLAG = False
-GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
+genai_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 
 def monitor_exit():
@@ -108,15 +107,13 @@ def capture_screenshots():
 
 def ocr(image: Image.Image) -> str:
     """GeminiでOCRを実行"""
-    client = genai.Client(api_key=GEMINI_API_KEY)
-
     prompt = (
         "この画像からすべてのテキストを抽出してください。レイアウトをできるだけ保持し、段落や改行を維持してください。"
         "各ページには、ヘッダーとフッターが含まれている場合があります。その場合、ヘッダーとフッターを除いてテキストを抽出してください。"
         "また、ページの終わりには、ページ番号が表示されていることがあります。その場合、それを除いてテキストを抽出してください。"
     )
 
-    response = client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
+    response = genai_client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
     return response.text
 
 
