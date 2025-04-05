@@ -29,15 +29,6 @@ SHUTDOWN_FLAG = False
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 
-def image_hash(image):
-    """画像データの MD5 ハッシュを生成し、一意の識別子を返す"""
-    try:
-        return hashlib.md5(image.tobytes()).hexdigest()
-    except (MemoryError, ValueError) as e:
-        print(f"画像ハッシュの生成中にエラーが発生しました: {e}")
-        return None
-
-
 def monitor_exit():
     """エンターを2回打ち込むとプログラムを終了するための監視"""
     global SHUTDOWN_FLAG
@@ -97,7 +88,7 @@ def capture_screenshots():
             time.sleep(0.1)
             continue
 
-        current_image_hash = image_hash(screenshot)
+        current_image_hash = hashlib.md5(screenshot.tobytes()).hexdigest()
         if last_image_hash == current_image_hash:
             print("🔄 ページの変化がないため終了")
             break
