@@ -2,7 +2,6 @@ import hashlib
 import json
 import os
 import subprocess
-import sys
 import threading
 import time
 from pathlib import Path
@@ -17,7 +16,7 @@ def load_config():
     config_path = Path(__file__).with_name("config.json")
 
     if not os.path.exists(config_path):
-        raise FileNotFoundError(f"設定ファイル config.json が見つかりません。")
+        raise FileNotFoundError("設定ファイル config.json が見つかりません。")
 
     with open(config_path, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -84,9 +83,6 @@ def capture_screenshots():
             break
 
         screenshot = pyautogui.screenshot(region=config["screenshot_region"])
-        if screenshot is None:
-            time.sleep(0.1)
-            continue
 
         current_image_hash = hashlib.md5(screenshot.tobytes()).hexdigest()
         if last_image_hash == current_image_hash:
@@ -131,7 +127,6 @@ def main():
 
     # スクリーンショット開始位置の設定
     setup_screenshot()
-
     time.sleep(config["activation_delay"])
 
     # 終了監視スレッドを開始
@@ -145,9 +140,7 @@ def main():
 
     # スクリーンショットを取得開始
     print("📸 スクリーンショットの取得を開始します...")
-
     capture_screenshots()
-
     print("✅ スクリーンショット取得完了")
 
     # 処理完了後に音を鳴らす
