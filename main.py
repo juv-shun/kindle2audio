@@ -10,6 +10,41 @@ import pyautogui
 from google import genai
 from PIL import Image
 
+SHUTDOWN_FLAG = False
+genai_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+
+
+def main():
+    # configファイルをロード
+    config = load_config()
+
+    # Kindleアプリをアクティブ化
+    subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
+    time.sleep(2)
+
+    # スクリーンショット開始準備
+    setup_screenshot()
+    time.sleep(config["activation_delay"])
+
+    # 終了監視スレッドを開始
+    monitor_thread = threading.Thread(target=monitor_exit, daemon=True)
+    monitor_thread.start()
+
+    # 出力ディレクトリの準備
+    if not os.path.exists(config["output_directory"]):
+        os.makedirs(config["output_directory"])
+        print(f"出力ディレクトリを作成しました: {config['output_directory']}")
+
+    # スクリーンショットを取得開始
+    print("📸 スクリーンショットの取得を開始します...")
+    capture_screenshots(config)
+    print("✅ スクリーンショット取得完了")
+
+    # 処理完了後に音を鳴らす
+    os.system("afplay /System/Library/Sounds/Glass.aiff")
+
+    print(f"スクリーンショットは {config['output_directory']} ディレクトリに保存されました。")
+
 
 def load_config():
     """OSに応じて適切な設定ファイルをロードする"""
@@ -20,27 +55,6 @@ def load_config():
 
     with open(config_path, "r", encoding="utf-8") as f:
         return json.load(f)
-
-
-SHUTDOWN_FLAG = False
-genai_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-
-
-def monitor_exit():
-    """エンターを2回打ち込むとプログラムを終了するための監視"""
-    global SHUTDOWN_FLAG
-    print("途中で作業を終了するには、エンターを2回押してください。")
-    count = 0
-    while not SHUTDOWN_FLAG:
-        line = input()
-        if line == "":
-            count += 1
-            if count >= 2:
-                print("終了要求が受け付けられました。処理を停止します。")
-                SHUTDOWN_FLAG = True
-                break
-        else:
-            count = 0
 
 
 def setup_screenshot():
@@ -68,6 +82,23 @@ def setup_screenshot():
         subprocess.run(["osascript", "-e", applescript_command])
     except subprocess.SubprocessError:
         print("エラー: Kindle のフルスクリーン化に失敗しました。")
+
+
+def monitor_exit():
+    """エンターを2回打ち込むとプログラムを終了するための監視"""
+    global SHUTDOWN_FLAG
+    print("途中で作業を終了するには、エンターを2回押してください。")
+    count = 0
+    while not SHUTDOWN_FLAG:
+        line = input()
+        if line == "":
+            count += 1
+            if count >= 2:
+                print("終了要求が受け付けられました。処理を停止します。")
+                SHUTDOWN_FLAG = True
+                break
+        else:
+            count = 0
 
 
 def capture_screenshots(config):
@@ -114,38 +145,6 @@ def ocr(image: Image.Image) -> str:
 
     response = genai_client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
     return response.text
-
-
-def main():
-    # configファイルをロード
-    config = load_config()
-
-    # Kindleアプリをアクティブ化
-    subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
-    time.sleep(2)
-
-    # スクリーンショット開始準備
-    setup_screenshot()
-    time.sleep(config["activation_delay"])
-
-    # 終了監視スレッドを開始
-    monitor_thread = threading.Thread(target=monitor_exit, daemon=True)
-    monitor_thread.start()
-
-    # 出力ディレクトリの準備
-    if not os.path.exists(config["output_directory"]):
-        os.makedirs(config["output_directory"])
-        print(f"出力ディレクトリを作成しました: {config['output_directory']}")
-
-    # スクリーンショットを取得開始
-    print("📸 スクリーンショットの取得を開始します...")
-    capture_screenshots(config)
-    print("✅ スクリーンショット取得完了")
-
-    # 処理完了後に音を鳴らす
-    os.system("afplay /System/Library/Sounds/Glass.aiff")
-
-    print(f"スクリーンショットは {config['output_directory']} ディレクトリに保存されました。")
 
 
 if __name__ == "__main__":
