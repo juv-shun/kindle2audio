@@ -22,7 +22,6 @@ def load_config():
         return json.load(f)
 
 
-config = load_config()
 SHUTDOWN_FLAG = False
 genai_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
@@ -71,7 +70,7 @@ def setup_screenshot():
         print("エラー: Kindle のフルスクリーン化に失敗しました。")
 
 
-def capture_screenshots():
+def capture_screenshots(config):
     """Kindleのスクリーンショットを連続取得し、ファイルに保存する"""
     last_image_hash = None
     page = 1
@@ -118,6 +117,9 @@ def ocr(image: Image.Image) -> str:
 
 
 def main():
+    # configファイルをロード
+    config = load_config()
+
     # Kindleアプリをアクティブ化
     subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
     time.sleep(2)
@@ -137,7 +139,7 @@ def main():
 
     # スクリーンショットを取得開始
     print("📸 スクリーンショットの取得を開始します...")
-    capture_screenshots()
+    capture_screenshots(config)
     print("✅ スクリーンショット取得完了")
 
     # 処理完了後に音を鳴らす
