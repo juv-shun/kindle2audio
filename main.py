@@ -122,7 +122,7 @@ def capture_screenshots(config):
         ocr_text = ocr(screenshot)
 
         # OCR結果をファイルに保存
-        file_path = os.path.join(config["output_directory"], f"page_{page:03d}.txt")
+        file_path = os.path.join(config["output_directory"], f"page_{page:03d}.md")
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(ocr_text)
         print(f"📄 ページ {page} のOCR結果を保存しました: {file_path}")
@@ -138,8 +138,10 @@ def capture_screenshots(config):
 def ocr(image: Image.Image) -> str:
     """GeminiでOCRを実行"""
     prompt = (
-        "この画像からすべてのテキストを抽出してください。レイアウトをできるだけ保持し、段落や改行を維持してください。"
-        "各ページには、ヘッダーとフッターが含まれている場合があります。その場合、ヘッダーとフッターを除いてテキストを抽出してください。"
+        "この画像は、本のページのスクリーンショットです。この本の内容を抽出し、マークダウン形式で出力してください。"
+        "抽出する際は、本の内容は極力省略や変更はせず、極力正確に抽出してください。"
+        "ページ内に図が含まれている場合、図の内容はテキスト化しないでください。"
+        "各ページには、ヘッダーとフッターが含まれている場合があります。その場合、ヘッダーとフッターを除外してください。"
         "また、ページの終わりには、ページ番号が表示されていることがあります。その場合、それを除いてテキストを抽出してください。"
     )
 
