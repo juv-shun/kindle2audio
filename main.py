@@ -158,6 +158,7 @@ def ocr(image: Image.Image) -> str:
         "ページ内に図が含まれている場合、図の内容はテキスト化しないでください。"
         "各ページには、ヘッダーとフッターが含まれている場合があります。その場合、ヘッダーとフッターを除外してください。"
         "また、ページの終わりには、ページ番号が表示されていることがあります。その場合、それを除いてテキストを抽出してください。"
+        "なお、出力されたテキストは、.mdファイルに保存されるため、 ```markdown ``` で囲む必要はありません。"
     )
 
     response = genai_client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
