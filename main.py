@@ -22,6 +22,9 @@ def main():
     subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
     time.sleep(2)
 
+    # 本のタイトルを入力
+    book_title = input_book_title()
+
     # スクリーンショット開始準備
     setup_screenshot()
     time.sleep(config["activation_delay"])
@@ -37,13 +40,24 @@ def main():
 
     # スクリーンショットを取得開始
     print("📸 スクリーンショットの取得を開始します...")
-    capture_screenshots(config)
+    capture_screenshots(config, book_title)
     print("✅ スクリーンショット取得完了")
 
     # 処理完了後に音を鳴らす
     os.system("afplay /System/Library/Sounds/Glass.aiff")
 
     print(f"スクリーンショットは {config['output_directory']} ディレクトリに保存されました。")
+
+
+def input_book_title() -> str:
+    """本のタイトルをユーザーに入力させる"""
+    print("\n=== 本のタイトル入力 ===")
+    print("処理を行う本のタイトルを入力してください。")
+    while True:
+        title = input("本のタイトル: ").strip()
+        if title:
+            return title
+        print("タイトルが入力されていません。再度入力してください。")
 
 
 def load_config():
@@ -101,7 +115,7 @@ def monitor_exit():
             count = 0
 
 
-def capture_screenshots(config):
+def capture_screenshots(config, book_title):
     """Kindleのスクリーンショットを連続取得し、ファイルに保存する"""
     last_image_hash = None
     page = 1
@@ -122,7 +136,7 @@ def capture_screenshots(config):
         ocr_text = ocr(screenshot)
 
         # OCR結果をファイルに保存
-        file_path = os.path.join(config["output_directory"], f"page_{page:03d}.md")
+        file_path = os.path.join(config["output_directory"], f"{book_title}_page_{page:03d}.md")
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(ocr_text)
         print(f"📄 ページ {page} のOCR結果を保存しました: {file_path}")
