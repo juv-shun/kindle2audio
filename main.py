@@ -135,11 +135,12 @@ def capture_screenshots(config, book_title):
         # OCRを実行
         ocr_text = ocr(screenshot)
 
-        # OCR結果をファイルに保存
-        file_path = os.path.join(config["output_directory"], f"{book_title}_page_{page:03d}.md")
-        with open(file_path, "w", encoding="utf-8") as f:
+        # OCR結果を単一ファイルに追記
+        file_path = os.path.join(config["output_directory"], f"{book_title}.md")
+        with open(file_path, "a", encoding="utf-8") as f:
             f.write(ocr_text)
-        print(f"📄 ページ {page} のOCR結果を保存しました: {file_path}")
+            f.write("\n")
+        print(f"📄 ページ {page} のOCR結果を追記しました: {file_path}")
 
         last_image_hash = current_image_hash
 
