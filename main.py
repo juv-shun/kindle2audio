@@ -18,12 +18,12 @@ def main():
     # configファイルをロード
     config = load_config()
 
+    # 本のタイトルを入力
+    book_title = input_book_title()
+
     # Kindleアプリをアクティブ化
     subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
     time.sleep(2)
-
-    # 本のタイトルを入力
-    book_title = input_book_title()
 
     # スクリーンショット開始準備
     setup_screenshot()
