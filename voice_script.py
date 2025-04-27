@@ -23,7 +23,10 @@ def main():
         system_prompt = f.read()
 
     # Geminiで読み聞かせスクリプトを作成
-    generate_voice_script(system_prompt, user_prompt, manuscript_path)
+    script = generate_voice_script(system_prompt, user_prompt, manuscript_path)
+
+    # 読み聞かせスクリプトを保存
+    save_voice_script(script)
 
 
 def load_config():
@@ -50,6 +53,7 @@ def generate_voice_script(system_prompt: str, user_prompt: str, manuscript_path:
         manuscript_content = f.read()
     manuscript = types.Part(text=manuscript_content)
 
+    print("🚀 読み聞かせスクリプトの生成を開始します...")
     response = genai_client.models.generate_content(
         model="gemini-2.5-pro-preview-03-25",
         contents=[user_prompt, manuscript],
@@ -57,11 +61,14 @@ def generate_voice_script(system_prompt: str, user_prompt: str, manuscript_path:
             system_instruction=system_prompt,
         ),
     )
+    return response.text
 
+
+def save_voice_script(script: str):
     # スクリプトを出力ファイルに保存
     output_path = Path(__file__).with_name("output") / "voice_script.txt"
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(response.text)
+        f.write(script)
 
     print(f"読み聞かせスクリプトを {output_path} に保存しました。")
 
