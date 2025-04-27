@@ -11,5 +11,5 @@
     "page_turn_direction": "right",
     "image_format": "png",
     "output_directory": "output",
-    "output_filename": "book.md"
+    "output_filename": "manuscript.md"
 }
