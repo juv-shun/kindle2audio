@@ -15,15 +15,17 @@ def main():
     # ユーザに第何章を読み聞かせスクリプトにするかを尋ねる
     user_prompt = input("第何章を読み聞かせスクリプトにするかを入力してください: ")
 
-    # 原稿ファイルのパスを取得
+    # 原稿を読み込む
     manuscript_path = Path(__file__).with_name(config["output_directory"]) / config["output_filename"]
+    with open(manuscript_path, "r", encoding="utf-8") as f:
+        manuscript = f.read()
 
     # システムプロンプトを読み込む
     with open(Path(__file__).with_name("prompts") / "voice_script_system.txt", "r", encoding="utf-8") as f:
         system_prompt = f.read()
 
     # Geminiで読み聞かせスクリプトを作成
-    script = generate_voice_script(system_prompt, user_prompt, manuscript_path)
+    script = generate_voice_script(system_prompt, user_prompt, manuscript)
 
     # 読み聞かせスクリプトを保存
     save_voice_script(script)
@@ -40,23 +42,20 @@ def load_config():
         return json.load(f)
 
 
-def generate_voice_script(system_prompt: str, user_prompt: str, manuscript_path: Path):
+def generate_voice_script(system_prompt: str, user_prompt: str, manuscript: str):
     """
     テキストを読み聞かせ用スクリプトを作成
 
     Args:
         system_prompt (str): システムプロンプト
         user_prompt (str): ユーザープロンプト
-        manuscript_path (Path): 原稿ファイルのパス
+        manuscript (str): 原稿
     """
-    with open(manuscript_path, "r", encoding="utf-8") as f:
-        manuscript_content = f.read()
-    manuscript = types.Part(text=manuscript_content)
 
     print("🚀 読み聞かせスクリプトの生成を開始します...")
     response = genai_client.models.generate_content(
         model="gemini-2.5-pro-preview-03-25",
-        contents=[user_prompt, manuscript],
+        contents=[user_prompt, types.Part(text=manuscript)],
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
         ),
