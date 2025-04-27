@@ -55,7 +55,7 @@ export GEMINI_API_KEY="あなたのGemini APIキー"
 3. スクリプトを実行します：
 
 ```bash
-python main.py
+python ocr.py
 ```
 
 4. 指示に従ってKindleアプリを準備し、テキスト抽出を開始します：
