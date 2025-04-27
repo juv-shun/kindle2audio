@@ -122,7 +122,7 @@ def capture_screenshots(config):
         ocr_text = ocr(screenshot)
 
         # OCR結果を単一ファイルに追記
-        file_path = os.path.join(config["output_directory"], config["output_filename"])
+        file_path = Path(__file__).with_name(config["output_directory"]) / config["output_filename"]
         with open(file_path, "a", encoding="utf-8") as f:
             f.write(ocr_text)
             f.write("\n")
