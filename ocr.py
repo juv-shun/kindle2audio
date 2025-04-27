@@ -147,7 +147,7 @@ def ocr(image: Image.Image) -> str:
         "なお、出力されたテキストは、.mdファイルに保存されるため、 ```markdown ``` で囲む必要はありません。"
     )
 
-    response = genai_client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
+    response = genai_client.models.generate_content(model="gemini-2.5-flash-preview-04-17", contents=[prompt, image])
     return response.text
 
 

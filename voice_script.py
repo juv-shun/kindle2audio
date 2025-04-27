@@ -57,7 +57,7 @@ def get_chapters(manuscript: str) -> int:
     """
     prompt = "原稿の章が何章構成かを教えてください。回答は、半角数字で返してください。"
     response = genai_client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash-preview-04-17",
         contents=[prompt, manuscript],
     )
     return int(response.text)
