@@ -73,6 +73,7 @@ python main.py
 - `activation_delay`: Kindleアプリ起動後の待機時間（秒）
 - `page_turn_direction`: ページめくりの方向（"right" または "left"）
 - `output_directory`: 抽出されたテキストの保存先ディレクトリ
+- `output_filename`: 抽出されたテキストの保存ファイル名
 
 ## 操作方法
 
