@@ -12,13 +12,16 @@ def main():
     # configファイルをロード
     config = load_config()
 
-    # ユーザに第何章を読み聞かせスクリプトにするかを尋ねる
-    user_prompt = input("第何章を読み聞かせスクリプトにするかを入力してください: ")
-
     # 原稿を読み込む
     manuscript_path = Path(__file__).with_name(config["output_directory"]) / config["output_filename"]
     with open(manuscript_path, "r", encoding="utf-8") as f:
         manuscript = f.read()
+
+    # 章の数を取得
+    chapter_count = get_chapters(manuscript)
+
+    # ユーザに読み聞かせスクリプトを作成する章を尋ねる
+    user_prompt = specify_chapter(chapter_count)
 
     # システムプロンプトを読み込む
     with open(Path(__file__).with_name("prompts") / "voice_script_system.txt", "r", encoding="utf-8") as f:
@@ -42,6 +45,47 @@ def load_config():
         return json.load(f)
 
 
+def get_chapters(manuscript: str) -> int:
+    """
+    原稿の章が何章構成かを返す
+
+    Args:
+        manuscript (str): 原稿
+
+    Returns:
+        int: 章の数
+    """
+    prompt = "原稿の章が何章構成かを教えてください。回答は、半角数字で返してください。"
+    response = genai_client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=[prompt, manuscript],
+    )
+    return int(response.text)
+
+
+def specify_chapter(chapter_count: int) -> str:
+    """
+    ユーザに読み聞かせスクリプトを作成する章を尋ねる
+
+    Args:
+        chapter_count (int): 章の数
+
+    Returns:
+        str: 読み聞かせスクリプトを作成する章
+    """
+    chapters = [f"第{i}章" for i in range(1, chapter_count + 1)]
+    print("読み聞かせスクリプトを作成したい章を選択してください:")
+    for idx, chap in enumerate(chapters, start=1):
+        print(f"{idx}. {chap}")
+    while True:
+        choice = input(f"番号で選択してください (1-{chapter_count}): ")
+        if choice in [str(i) for i in range(1, chapter_count + 1)]:
+            chapter = chapters[int(choice) - 1]
+            break
+        print("無効な選択です。1〜3の番号を入力してください。")
+    return chapter
+
+
 def generate_voice_script(system_prompt: str, user_prompt: str, manuscript: str):
     """
     テキストを読み聞かせ用スクリプトを作成
@@ -52,7 +96,7 @@ def generate_voice_script(system_prompt: str, user_prompt: str, manuscript: str)
         manuscript (str): 原稿
     """
 
-    print("🚀 読み聞かせスクリプトの生成を開始します...")
+    print(f"🚀 {user_prompt}の読み聞かせスクリプトの生成を開始します...")
     response = genai_client.models.generate_content(
         model="gemini-2.5-pro-preview-03-25",
         contents=[user_prompt, types.Part(text=manuscript)],
