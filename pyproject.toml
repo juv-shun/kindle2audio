@@ -10,6 +10,7 @@ python = "^3.13"
 pyautogui = "^0.9.54"
 pillow = "^11.1.0"
 google-genai = "^1.9.0"
+requests = "^2.32.3"
 
 
 [tool.poetry.group.dev.dependencies]
