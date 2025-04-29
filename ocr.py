@@ -136,17 +136,12 @@ def capture_screenshots(config):
         page += 1
 
 
+with open(Path(__file__).with_name("prompts") / "ocr.txt", "r", encoding="utf-8") as f:
+    prompt = f.read()
+
+
 def ocr(image: Image.Image) -> str:
     """GeminiでOCRを実行"""
-    prompt = (
-        "この画像は、本のページのスクリーンショットです。この本の内容を抽出し、マークダウン形式で出力してください。"
-        "抽出する際は、本の内容は極力省略や変更はせず、極力正確に抽出してください。"
-        "ページ内に図が含まれている場合、図の内容はテキスト化しないでください。"
-        "各ページには、ヘッダーとフッターが含まれている場合があります。その場合、ヘッダーとフッターを除外してください。"
-        "また、ページの終わりには、ページ番号が表示されていることがあります。その場合、それを除いてテキストを抽出してください。"
-        "なお、出力されたテキストは、.mdファイルに保存されるため、 ```markdown ``` で囲む必要はありません。"
-    )
-
     response = genai_client.models.generate_content(model="gemini-2.5-flash-preview-04-17", contents=[prompt, image])
     return response.text
 
