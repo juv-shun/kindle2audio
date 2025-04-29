@@ -70,9 +70,9 @@ python ocr.py
 
 6. 読み聞かせ用スクリプトを生成します：
 ```bash
-python voice_script.py
+python script.py
 ```
-   - 生成された`voice_script.txt`は`output`ディレクトリに保存されます  
+   - 生成された`script.txt`は`output`ディレクトリに保存されます  
    - 実行時に対象の章を番号で選択してください
 
 7. VoiceVoxエンジンを起動し、音声ファイルを合成します：
@@ -80,7 +80,7 @@ python voice_script.py
 python synthesis.py
 ```
    - 実行前にVoiceVoxエンジンが起動している必要があります（例：`docker run -p 50021:50021 voicevox/voicevox_engine:cpu`）  
-   - 合成された`voice.wav`が`output`ディレクトリに保存されます
+   - 合成された`audio.wav`が`output`ディレクトリに保存されます
 
 ## 設定オプション
 

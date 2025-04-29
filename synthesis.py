@@ -1,5 +1,3 @@
-import os
-import shutil
 import tempfile
 import wave
 from pathlib import Path
@@ -19,7 +17,7 @@ def main():
         temp_dir = Path(td)
 
         file_count = 1
-        for line in open(Path(__file__).with_name("output") / "voice_script.txt", "r", encoding="utf-8"):
+        for line in open(Path(__file__).with_name("output") / "script.txt", "r", encoding="utf-8"):
             # 空行はスキップ
             line = line.strip()
             if not line:
@@ -44,9 +42,9 @@ def main():
             print(f"音声合成が完了しました。voice_{file_count:03d}.wavを保存しました。")
             file_count += 1
 
-            # temp_wavディレクトリの内容をoutput/voice.wavに結合
-            join_wav(sorted(temp_dir.glob("*.wav")), Path(__file__).with_name("output") / "voice.wav")
-            print("音声合成が完了しました。output/voice.wavを保存しました。")
+            # temp_wavディレクトリの内容をoutput/audio.wavに結合
+            join_wav(sorted(temp_dir.glob("*.wav")), Path(__file__).with_name("output") / "audio.wav")
+            print("音声合成が完了しました。output/audio.wavを保存しました。")
 
 
 def join_wav(inputs: list[Path], output: Path):

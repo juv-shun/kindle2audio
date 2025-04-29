@@ -24,14 +24,14 @@ def main():
     user_prompt = specify_chapter(chapter_count)
 
     # システムプロンプトを読み込む
-    with open(Path(__file__).with_name("prompts") / "voice_script_system.txt", "r", encoding="utf-8") as f:
+    with open(Path(__file__).with_name("prompts") / "script_system.txt", "r", encoding="utf-8") as f:
         system_prompt = f.read()
 
     # Geminiで読み聞かせスクリプトを作成
-    script = generate_voice_script(system_prompt, user_prompt, manuscript)
+    script = generate_script(system_prompt, user_prompt, manuscript)
 
     # 読み聞かせスクリプトを保存
-    save_voice_script(script)
+    save_script(script)
 
 
 def load_config():
@@ -86,7 +86,7 @@ def specify_chapter(chapter_count: int) -> str:
     return chapter
 
 
-def generate_voice_script(system_prompt: str, user_prompt: str, manuscript: str):
+def generate_script(system_prompt: str, user_prompt: str, manuscript: str):
     """
     テキストを読み聞かせ用スクリプトを作成
 
@@ -107,9 +107,9 @@ def generate_voice_script(system_prompt: str, user_prompt: str, manuscript: str)
     return response.text
 
 
-def save_voice_script(script: str):
+def save_script(script: str):
     # スクリプトを出力ファイルに保存
-    output_path = Path(__file__).with_name("output") / "voice_script.txt"
+    output_path = Path(__file__).with_name("output") / "script.txt"
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(script)
 
