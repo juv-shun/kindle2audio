@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kindle2txt"
+name = "kindle2audio"
 version = "0.1.0"
 description = ""
 authors = ["Shun Fukusumi <shun.fukusumi@gmail.com>"]

@@ -1,6 +1,6 @@
-# Kindle2txt
+# kindle2audio
 
-Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPythonツールです。スクリーンショットとOCR技術を組み合わせて、Kindleアプリで表示されている電子書籍のテキストをテキストファイルとして保存します。また、読み聞かせ用スクリプトを生成し、VoiceVoxによる高品質音声合成も可能です。
+kindle2audioは、Kindle電子書籍のテキストを自動的に抽出するPythonツールです。スクリーンショットとOCR技術を組み合わせて、Kindleアプリで表示されている電子書籍のテキストをテキストファイルとして保存します。また、読み聞かせ用スクリプトを生成し、VoiceVoxによる高品質音声合成も可能です。
 
 ※ 本READMEは、AIによって自動生成されています。
 
@@ -26,8 +26,8 @@ Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPyth
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/juv-shun/kindle2txt.git
-cd kindle2txt
+git clone https://github.com/juv-shun/kindle2audio.git
+cd kindle2audio
 
 # 必要なパッケージをインストール
 poetry install
