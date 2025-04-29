@@ -1,6 +1,6 @@
 # Kindle2txt
 
-Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPythonツールです。スクリーンショットとOCR技術を組み合わせて、Kindleアプリで表示されている電子書籍のテキストをテキストファイルとして保存します。
+Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPythonツールです。スクリーンショットとOCR技術を組み合わせて、Kindleアプリで表示されている電子書籍のテキストをテキストファイルとして保存します。また、読み聞かせ用スクリプトを生成し、VoiceVoxによる高品質音声合成も可能です。
 
 ※ 本READMEは、AIによって自動生成されています。
 
@@ -11,6 +11,8 @@ Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPyth
 - Google Gemini AIを使用した高精度OCR
 - テキストレイアウトの保持
 - ヘッダー、フッター、ページ番号の自動除外
+- Gemini AIによる読み聞かせ用スクリプト生成
+- VoiceVoxによる高品質音声合成
 
 ## 必要条件
 
@@ -18,6 +20,7 @@ Kindle2txtは、Kindle電子書籍のテキストを自動的に抽出するPyth
 - macOS（OSXのみ対応）
 - Kindleデスクトップアプリケーション
 - Google Gemini API キー
+- VoiceVoxエンジン（ローカル実行またはクラウドサービス）
 
 ## インストール
 
@@ -48,7 +51,7 @@ export GEMINI_API_KEY="あなたのGemini APIキー"
     "activation_delay": 5,
     "page_turn_direction": "right",
     "image_format": "png",
-    "output_directory": "./output"
+    "output_directory": "output"
 }
 ```
 
@@ -64,6 +67,20 @@ python ocr.py
    - ターミナルに戻ってEnterキーを押すと、自動抽出が開始されます
 
 5. 抽出されたテキストは`output`ディレクトリに保存されます
+
+6. 読み聞かせ用スクリプトを生成します：
+```bash
+python voice_script.py
+```
+   - 生成された`voice_script.txt`は`output`ディレクトリに保存されます  
+   - 実行時に対象の章を番号で選択してください
+
+7. VoiceVoxエンジンを起動し、音声ファイルを合成します：
+```bash
+python synthesis.py
+```
+   - 実行前にVoiceVoxエンジンが起動している必要があります（例：`docker run -p 50021:50021 voicevox/voicevox_engine:cpu`）  
+   - 合成された`voice.wav`が`output`ディレクトリに保存されます
 
 ## 設定オプション
 
