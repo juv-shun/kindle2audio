@@ -1,4 +1,5 @@
 import os
+import shutil
 import wave
 from pathlib import Path
 
@@ -6,6 +7,7 @@ import requests
 
 # APIのベースURL
 VOICEVOX_BASE_URL = "http://localhost:50021"
+# VOICEVOX_BASE_URL = "https://voicevoxengine-production.up.railway.app"
 SPEAKER_ID = 8
 headers = {"Content-Type": "application/json"}
 
@@ -46,8 +48,7 @@ def main():
     print("音声合成が完了しました。output/voice.wavを保存しました。")
 
     # 一時ディレクトリを削除
-    for file in temp_dir.glob("*.wav"):
-        file.unlink()
+    shutil.rmtree(temp_dir)
 
 
 def join_wav(inputs: list[Path], output: Path):
