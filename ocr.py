@@ -19,7 +19,7 @@ def main():
     config = load_config()
 
     # Kindleアプリをアクティブ化
-    subprocess.run(["osascript", "-e", f'tell application "{config['kindle_app_name']}" to activate'], check=True)
+    subprocess.run(["osascript", "-e", f'tell application "{config["kindle_app_name"]}" to activate'], check=True)
     time.sleep(2)
 
     # スクリーンショット開始準備
@@ -53,7 +53,7 @@ def load_config():
     if not os.path.exists(config_path):
         raise FileNotFoundError("設定ファイル config.json が見つかりません。")
 
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -61,7 +61,7 @@ def setup_screenshot():
     """スクリーンショット開始位置の設定を促すメッセージを表示し、エンターキー入力後にKindleを最大化"""
     message = "スクリーンショット開始位置にページ位置を設定したら、ターミナル画面に戻ってEnterキーを押してください。"
     try:
-        subprocess.run(["osascript", "-e", f'display notification "{message}" with title "Kindle2Image"'])
+        subprocess.run(["osascript", "-e", f'display notification "{message}" with title "Kindle2Image"'], check=False)
     except subprocess.SubprocessError:
         print("エラー: 通知の送信に失敗しました。")
 
@@ -79,7 +79,7 @@ def setup_screenshot():
             end tell
         end tell
         """
-        subprocess.run(["osascript", "-e", applescript_command])
+        subprocess.run(["osascript", "-e", applescript_command], check=False)
     except subprocess.SubprocessError:
         print("エラー: Kindle のフルスクリーン化に失敗しました。")
 
@@ -136,13 +136,13 @@ def capture_screenshots(config):
         page += 1
 
 
-with open(Path(__file__).with_name("prompts") / "ocr.txt", "r", encoding="utf-8") as f:
+with open(Path(__file__).with_name("prompts") / "ocr.txt", encoding="utf-8") as f:
     prompt = f.read()
 
 
 def ocr(image: Image.Image) -> str:
     """GeminiでOCRを実行"""
-    response = genai_client.models.generate_content(model="gemini-2.5-flash-preview-04-17", contents=[prompt, image])
+    response = genai_client.models.generate_content(model="gemini-2.0-flash", contents=[prompt, image])
     return response.text
 
 
