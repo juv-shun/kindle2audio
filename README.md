@@ -30,7 +30,7 @@ git clone https://github.com/juv-shun/kindle2audio.git
 cd kindle2audio
 
 # 必要なパッケージをインストール
-poetry install
+uv pip sync
 ```
 
 ## 使い方
