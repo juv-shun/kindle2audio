@@ -3,6 +3,11 @@ name = "kindle2audio"
 version = "0.1.0"
 description = ""
 authors = ["Shun Fukusumi <shun.fukusumi@gmail.com>"]
+packages = [
+    { include = "ocr.py" },
+    { include = "script.py" },
+    { include = "synthesis.py" },
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
